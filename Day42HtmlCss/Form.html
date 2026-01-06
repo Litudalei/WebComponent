@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./forms.css">
+</head>
+<body>
+    <header><h1>HTML 5 Form Input Fields</h1></header>
+    <form action="" method="POST">
+        <div ><label for="name">Text Input for Name : </label>
+        <input type="text" id="name" name="name">
+        <error-output class="text-error" for="name" ></error-output>
+        </div>
+
+        <div><label for="password">Enter the Password : </label>
+        <input type="password" id="password" name="password">
+        <error-output class="password-error" for="password"></error-output></div>
+
+        <div><label for="email">Enter your EmailID : </label>
+        <input type="email" id="email">
+        <error-output class="email-error" for="email"></error-output></div>
+
+        <div><label for="url">Enter the URL : </label>
+        <input type="url" id="url"></div>  
+
+        <div><label for="mobile">Enter the Mobile Number : </label>
+        <input type="text" id="mobile" name="mobile">
+        <error-output class="mobile-error" for="mobile"></error-output></div>
+
+        <div><label for="tel">Enter the Telephone Number : </label> 
+        <input type="tel" id="tel" name="tel"></div>   
+
+        <div><label for="search">Search Input : </label> 
+        <input type="search" id="search"></div>
+
+        <div><label for="datetime">Select the Date and Time : </label><input type="datetime"></div>
+        <div><label for="salary">Choose Your Salary : </label><input type="range" name="salary" id="salary" min="300000" max="500000" step="100" value="400000"><output class="salary-output" for="salary">400000</output></div>
+        <div><button type="submit">Submit</button></div>
+    </form>
+    <script>
+        // As a User need to enter a valid First
+
+        // UC1 - Validating Name - Starting letter should be Capital. 
+
+        const name = document.getElementById("name");
+        let textError = document.querySelector(".text-error");
+        name.addEventListener("input",function(){
+            let nameRegex = RegExp('^[A-Z][a-zA-Z]*$');
+            if(nameRegex.test(name.value)){
+                textError.textContent = "";
+            }
+            else{
+                textError.textContent = "Name is Incorrect";
+            }
+
+        });
+
+        // UC2 - Validating email
+        
+        const email = document.getElementById("email");
+        let emailError = document.querySelector(".email-error");
+        email.addEventListener("input",function(){
+            
+            let emailRegex = RegExp('^[a-zA-Z]+(\.[a-zA-Z]+)?@[a-zA-Z]+\.[a-zA-Z]+(\.[a-zA-Z]+)?$');
+            if(emailRegex.test(email.value)){
+                emailError.textContent = "";
+                console.log("from 59".email.value);
+            }
+            else{
+                console.log("from 63",email.value);
+                emailError.textContent = "Email is Incorrect";
+            }
+        });
+        // UC3 - Validating Mobile Number :
+
+        const mobile = document.getElementById("mobile");
+        const mobileError = document.querySelector(".mobile-error");
+        mobile.addEventListener("input",function(){
+            let mobileFormat =  RegExp('^91\\s[0-9]{10}$');
+
+            if(mobileFormat.test(mobile.value)){
+                console.log("From 83 : ",mobile.value);
+                mobileError.textContent = "";
+            }else{
+                mobileError.textContent = "Incorrect Mobile Format";
+            }
+        })
+
+        // UC4 - Validating the password with min 8 characters
+        // UC5 - Validating password with atleast 1 uppercase, 1 numeric num, exactly 1 spl character"
+        const password = document.querySelector("#password");
+        const passwordError = document.querySelector(".password-error");
+        password.addEventListener("input",function(){
+            let passwordFormat =/^(?=.{8,}$)(?=.*[A-Z])(?=.*\d)(?!.*[^A-Za-z0-9].*[^A-Za-z0-9])[A-Za-z0-9]*[^A-Za-z0-9][A-Za-z0-9]*$/;
+            if(passwordFormat.test(password.value)){
+                passwordError.textContent = "";
+            }
+            else{
+                passwordError.textContent = "Password format is Incorrect";
+            }
+        })
+
+        
+
+        const salary = document.querySelector("#salary");
+        let output = document.querySelector(".salary-output");
+        output.textContent = salary.value;
+        output.addEventListener("output",function(){
+            output.textContent = salary.value;
+        })
+
+    </script>
+</body>
+</html>
