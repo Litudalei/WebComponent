@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Payroll</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">Employee Payroll</header>
+    <div class="form-container">
+        <header class="form-header">Employee Payroll Form</header>
+        <form id="payrollForm" >
+            <label>Name:</label>
+            <input type="text" id="name" required>
+            <div style="color: red;" class="error" id="nameError"></div>
+            <div class="form-row">
+                <label>Profile Image:</label>
+                <div class="profile-pics">
+                    <label class="pfl"><input type="radio" name="profile" value="pic1.png"><img src="assets/pic1.jpg"></label>
+                    <label class="pfl"><input type="radio" name="profile" value="pic2.png"><img src="assets/pic2.jpg"></label>
+                    <label class="pfl"><input type="radio" name="profile" value="pic3.png"><img src="assets/pic3.jpg"></label>
+                </div>
+            </div>
+            <div class="form-row">
+                <label>Gender:</label>
+                <div class="gender-box">
+                    <label class="gnd"><input type="radio" name="gender" value="Male">Male</label>
+                    <label class="gnd"><input type="radio" name="gender" value="Female">Female</label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label>Department:</label>
+                <div class="dept-box">
+                    <label class="dept"><input type="checkbox" value="HR">HR</label>
+                    <label class="dept"><input type="checkbox" value="Sales">Sales</label>
+                    <label class="dept"><input type="checkbox" value="Finance">Finance</label>
+                    <label class="dept"><input type="checkbox" value="Engineer">Engineer</label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label for="salary">Salary: <span id="salary-output">40000</span></label>
+                <input type="range" min="10000" max="100000" value="40000" id="salary">
+            </div>
+            <div class="form-row">
+                <div class="date-row">
+                    <label>Start Date:</label>
+                    <select id="day">
+                        <option>1</option><option>2</option><option>3</option>
+                        <option>4</option><option>5</option><option>6</option>
+                    </select>
+
+                    <select id="month">
+                        <option value="0">Jan</option>
+                        <option value="1">Feb</option>
+                        <option value="2">Mar</option>
+                        <option value="3">Apr</option>
+                        <option value="4">May</option>
+                        <option value="5">Jun</option>
+                        <option value="6">Jul</option>
+                        <option value="7">Aug</option>
+                        <option value="8">Sep</option>
+                        <option value="9">Oct</option>
+                        <option value="10">Nov</option>
+                        <option value="11">Dec</option>
+                    </select>
+
+                    <select id="year">
+                        <option>2025</option><option>2024</option><option>2023</option>
+                    </select>
+                </div>  
+                <div style="color: red;" class="error" id="dateError"></div>
+            </div>
+            <div class="form-row">
+                <label for="notes">Notes:</label>
+                <textarea id="notes" rows="3"></textarea>
+            </div>
+
+            <div id="buttons" class="form-buttons">
+                <button type="reset" id="resetBtn" class="btn">Reset</button>
+                <button id="cancelBtn" class="btn">Cancel</button>
+                <button id="submitBtn" class="btn">Submit</button>
+            </div>
+        </form>
+
+    </div>
+
+
+    <script>
+
+        function saveToLocalStorage(employeePayrollObj) {
+            let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList")) || [];
+            employeePayrollList.push(employeePayrollObj);
+            localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
+        }
+        
+        function validateStartDate() {
+            console.log("validateStartDate function executing");
+
+            const day = parseInt(document.getElementById("day").value);
+            const month = parseInt(document.getElementById("month").value); // must be 0–11
+            const year = parseInt(document.getElementById("year").value);
+
+            const selected = new Date(year, month, day);
+            const today = new Date();
+
+            // Normalize both to MIDNIGHT
+            const selectedMid = new Date(selected.getFullYear(), selected.getMonth(), selected.getDate());
+            const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+            const diffMs = todayMid - selectedMid;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+            console.log("Diff:", diffDays);
+
+            // 1️⃣ future date check FIRST
+            if (diffDays < 0) {
+                document.getElementById("dateError").innerText =
+                    "Start date cannot be in the future!";
+                return false;
+            }
+
+            // 2️⃣ older than 30 days check
+            if (diffDays > 30) {
+                document.getElementById("dateError").innerText =
+                    "Start date must be within 30 days!";
+                return false;
+            }
+
+            // 3️⃣ valid
+            document.getElementById("dateError").innerText = "";
+            return true;
+        }
+
+
+
+        class EmployeePayroll {
+
+            constructor() {
+                this._name = "";
+                this._profilePic = "";
+                this._gender = "";
+                this._department = [];
+                this._salary = "";
+                this._notes = "";
+                this._startDate = "";
+            }
+
+            // ----------- NAME -----------
+            get name() { return this._name; }
+            set name(name) {
+                let regex = /^[A-Z][a-zA-Z ]{2,}$/;
+                if (!regex.test(name)) throw "Invalid Name!";
+                this._name = name;
+            }
+
+            // ----------- PROFILE PIC -----------
+            get profilePic() { return this._profilePic; }
+            set profilePic(pic) {
+                this._profilePic = pic;
+            }
+
+            // ----------- GENDER -----------
+            get gender() { return this._gender; }
+            set gender(gender) {
+                this._gender = gender;
+            }
+
+            // ----------- DEPARTMENT -----------
+            get department() { return this._department; }
+            set department(deptList) {
+                this._department = deptList;
+            }
+
+            // ----------- SALARY -----------
+            get salary() { return this._salary; }
+            set salary(sal) {
+                this._salary = sal;
+            }
+
+            // ----------- NOTES -----------
+            get notes() { return this._notes; }
+            set notes(notes) {
+                this._notes = notes;
+            }
+
+            // ----------- START DATE -----------
+            get startDate() { return this._startDate; }
+            set startDate(date) {
+
+                const today = new Date();
+                const diff = (today - date) / (1000 * 60 * 60 * 24);
+
+                if (diff < 0) throw "Future date not allowed!";
+                if (diff > 30) throw "Start date must be within 30 days!";
+
+                this._startDate = date;
+            }
+        }
+
+
+        window.addEventListener("DOMContentLoaded", () => {
+            // Salary output
+            const salarySlider = document.getElementById("salary");
+            const salaryOutput = document.getElementById("salary-output");
+            salarySlider.addEventListener("input", () => {
+                salaryOutput.textContent = salarySlider.value;
+            });
+
+            // Name validation
+            const nameField = document.getElementById("name");
+            nameField.addEventListener("input", function () {
+                let regex = /^[A-Z][a-zA-Z ]{2,}$/;
+                if (!regex.test(this.value)) {
+                    nameError.innerText = "Name must start with capital and min 3 chars!";
+                } else {
+                    nameError.innerText = "";
+                }
+            });
+
+            // Date validation
+            document.getElementById("day").addEventListener("change", validateStartDate);
+            document.getElementById("month").addEventListener("change", validateStartDate);
+            document.getElementById("year").addEventListener("change", validateStartDate);
+
+        });
+
+        document.getElementById("resetBtn").addEventListener("click", function () {
+        document.getElementById("nameError").innerText = "";
+        document.getElementById("dateError").innerText = "";
+        document.getElementById("salary-output").textContent = document.getElementById("salary").value;
+        });
+
+
+        document.getElementById("payrollForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            if (!validateStartDate()) return;
+
+            try {
+                let emp = new EmployeePayroll();
+
+                emp.name = document.getElementById("name").value;
+                emp.profilePic = document.querySelector("input[name='profile']:checked")?.value || "";
+                emp.gender = document.querySelector("input[name='gender']:checked")?.value || "";
+
+                let deptValues = [];
+                document.querySelectorAll("input[type='checkbox']:checked").forEach(cb => {
+                    deptValues.push(cb.value);
+                });
+                emp.department = deptValues;
+
+                emp.salary = document.getElementById("salary").value;
+                emp.notes = document.getElementById("notes").value;
+
+                let day = document.getElementById("day").value;
+                let month = document.getElementById("month").value;
+                let year = document.getElementById("year").value;
+                emp.startDate = new Date(year, month, day);
+
+                saveToLocalStorage(emp);   // Use Case 4
+
+                alert("Employee Data Submitted Successfully!");
+                console.log(emp);
+
+            } catch (err) {
+                alert(err);
+            }
+        });
+
+        document.getElementById("payrollForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            if (!validateStartDate()) return;
+
+            try {
+                let emp = new EmployeePayroll();
+
+                emp.name = document.getElementById("name").value;
+                emp.profilePic = document.querySelector("input[name='profile']:checked")?.value || "";
+                emp.gender = document.querySelector("input[name='gender']:checked")?.value || "";
+
+                let deptValues = [];
+                document.querySelectorAll("input[type='checkbox']:checked").forEach(cb => {
+                    deptValues.push(cb.value);
+                });
+                emp.department = deptValues;
+
+                emp.salary = document.getElementById("salary").value;
+                emp.notes = document.getElementById("notes").value;
+
+                let day = document.getElementById("day").value;
+                let month = document.getElementById("month").value;
+                let year = document.getElementById("year").value;
+                emp.startDate = new Date(year, month, day);
+
+                saveToLocalStorage(emp);   // Use Case 4
+
+                alert("Employee Data Submitted Successfully!");
+                console.log(emp);
+
+            } catch (err) {
+                alert(err);
+            }
+        });
+
+
+
+    </script>
+</body>
+</html>

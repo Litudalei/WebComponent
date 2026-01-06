@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main-header {
+    background: #3591b0;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.form-container {
+    width: 40%;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-header {
+    font-size: 24px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.form-row {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+label{
+    font-size: 18px;
+}
+input {
+    margin: 10px;
+    padding: 8px;
+    font-size: 16px;
+
+}
+
+.pfl{
+    margin-right: 50px;
+}
+
+.gnd{
+    margin-right: 42px;
+}
+
+.dept{
+    margin-right: 25px;
+}
+.profile-pics {
+    display: flex;
+    gap: 15px;
+}
+.profile-pics img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+#buttons{
+    margin-top:20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+button{
+    padding: 7px;
+    width: 100px;
+    background-color: rgb(12, 174, 174);
+    font-size: 18px;
+    color: white;
+    border: 0px;
+    border-radius: 10px;
+}
+
+.date-row{
+    display: flex;
+    flex-direction: row;
+    
+}
+
+select{
+    margin-left: 30px;
+}
