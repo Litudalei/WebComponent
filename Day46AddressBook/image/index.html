@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Address Book</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1>Address Book</h1>
+    </div>
+    <div class="topbar-right">
+      <div id="contact-count" class="count-pill">0 Contacts</div>
+      <a href="add_contact.html" class="btn add">+ Add Contact</a>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container">
+    <section class="list-section">
+      <div id="list-wrap" class="cards">
+        <!-- Cards populated by JS -->
+      </div>
+
+      <div id="empty-msg" class="empty">
+        No contacts found. Click <strong>Add Contact</strong> to create one.
+      </div>
+    </section>
+  </main>
+
+  <script src="js/home.js"></script>
+</body>
+</html>
