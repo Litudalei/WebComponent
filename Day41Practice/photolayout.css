@@ -1,0 +1,25 @@
+*{
+    margin:0;
+    padding: 10px 15px;
+}
+
+header{
+    text-align: center;
+    background-color: darkorange;
+}
+
+#gallery{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#gallery div img{
+    justify-content: space-around;
+    height: 300px;
+    width: 313px;
+}
+
+footer{
+    background-color: black;
+    height: 10px;
+}
